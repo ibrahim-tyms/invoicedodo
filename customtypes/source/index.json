@@ -1,0 +1,50 @@
+{
+  "format": "custom",
+  "id": "source",
+  "json": {
+    "Main": {
+      "uid": {
+        "config": {
+          "label": "UID"
+        },
+        "type": "UID"
+      },
+      "title": {
+        "config": {
+          "label": "Title of the page or report"
+        },
+        "type": "Text"
+      },
+      "publisher": {
+        "config": {
+          "label": "Publisher",
+          "placeholder": "e.g. Federal Reserve, IRS, Stripe"
+        },
+        "type": "Text"
+      },
+      "url": {
+        "config": {
+          "allowTargetBlank": true,
+          "label": "URL",
+          "select": "web"
+        },
+        "type": "Link"
+      },
+      "year": {
+        "config": {
+          "label": "Year published"
+        },
+        "type": "Number"
+      },
+      "accessed": {
+        "config": {
+          "label": "Date checked"
+        },
+        "type": "Date"
+      }
+    }
+  },
+  "label": "Source",
+  "repeatable": true,
+  "status": true
+}

@@ -1,0 +1,30 @@
+{
+  "id": "cta",
+  "name": "Call to Action",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "description": "Default",
+      "docURL": "",
+      "id": "default",
+      "imageUrl": "",
+      "name": "Default",
+      "primary": {
+        "heading": {
+          "config": {
+            "label": "Heading",
+            "placeholder": "Never chase a client again."
+          },
+          "type": "Text"
+        },
+        "body": {
+          "config": {
+            "label": "Body"
+          },
+          "type": "Text"
+        }
+      },
+      "version": ""
+    }
+  ]
+}

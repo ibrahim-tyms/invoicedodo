@@ -1,0 +1,71 @@
+{
+  "format": "custom",
+  "id": "author",
+  "json": {
+    "Main": {
+      "uid": {
+        "config": {
+          "label": "UID"
+        },
+        "type": "UID"
+      },
+      "name": {
+        "config": {
+          "label": "Name"
+        },
+        "type": "Text"
+      },
+      "role": {
+        "config": {
+          "label": "Role or title",
+          "placeholder": "e.g. Founder, CPA, Freelance designer"
+        },
+        "type": "Text"
+      },
+      "avatar": {
+        "config": {
+          "label": "Photo"
+        },
+        "type": "Image"
+      },
+      "bio": {
+        "config": {
+          "label": "Bio",
+          "multi": "paragraph,strong,em,hyperlink"
+        },
+        "type": "StructuredText"
+      },
+      "expertise": {
+        "config": {
+          "label": "Expertise (comma separated)",
+          "placeholder": "invoicing, freelance taxes, cash flow"
+        },
+        "type": "Text"
+      },
+      "linkedin": {
+        "config": {
+          "label": "LinkedIn",
+          "select": "web"
+        },
+        "type": "Link"
+      },
+      "x": {
+        "config": {
+          "label": "X (Twitter)",
+          "select": "web"
+        },
+        "type": "Link"
+      },
+      "website": {
+        "config": {
+          "label": "Website",
+          "select": "web"
+        },
+        "type": "Link"
+      }
+    }
+  },
+  "label": "Author",
+  "repeatable": true,
+  "status": true
+}

@@ -1,0 +1,29 @@
+{
+  "id": "figure",
+  "name": "Figure",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "description": "Default",
+      "docURL": "",
+      "id": "default",
+      "imageUrl": "",
+      "name": "Default",
+      "primary": {
+        "image": {
+          "config": {
+            "label": "Image or chart (2400x1350)"
+          },
+          "type": "Image"
+        },
+        "caption": {
+          "config": {
+            "label": "Caption (name the data source)"
+          },
+          "type": "Text"
+        }
+      },
+      "version": ""
+    }
+  ]
+}

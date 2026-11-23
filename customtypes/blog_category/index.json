@@ -1,0 +1,43 @@
+{
+  "format": "custom",
+  "id": "blog_category",
+  "json": {
+    "Main": {
+      "uid": {
+        "config": {
+          "label": "UID"
+        },
+        "type": "UID"
+      },
+      "name": {
+        "config": {
+          "label": "Name"
+        },
+        "type": "Text"
+      },
+      "description": {
+        "config": {
+          "label": "Description"
+        },
+        "type": "Text"
+      }
+    },
+    "SEO": {
+      "meta_title": {
+        "config": {
+          "label": "Meta title"
+        },
+        "type": "Text"
+      },
+      "meta_description": {
+        "config": {
+          "label": "Meta description"
+        },
+        "type": "Text"
+      }
+    }
+  },
+  "label": "Blog Category",
+  "repeatable": true,
+  "status": true
+}

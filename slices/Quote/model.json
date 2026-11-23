@@ -1,0 +1,30 @@
+{
+  "id": "quote",
+  "name": "Quote",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "description": "Default",
+      "docURL": "",
+      "id": "default",
+      "imageUrl": "",
+      "name": "Default",
+      "primary": {
+        "quote": {
+          "config": {
+            "label": "Quote or Short on time? summary",
+            "multi": "paragraph,strong,em,hyperlink"
+          },
+          "type": "StructuredText"
+        },
+        "cite": {
+          "config": {
+            "label": "Attribution (optional)"
+          },
+          "type": "Text"
+        }
+      },
+      "version": ""
+    }
+  ]
+}

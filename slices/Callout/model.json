@@ -1,0 +1,42 @@
+{
+  "id": "callout",
+  "name": "Callout",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "description": "Default",
+      "docURL": "",
+      "id": "default",
+      "imageUrl": "",
+      "name": "Default",
+      "primary": {
+        "tone": {
+          "config": {
+            "default_value": "tip",
+            "label": "Tone",
+            "options": [
+              "tip",
+              "note",
+              "warning"
+            ]
+          },
+          "type": "Select"
+        },
+        "heading": {
+          "config": {
+            "label": "Heading (optional)"
+          },
+          "type": "Text"
+        },
+        "body": {
+          "config": {
+            "label": "Body",
+            "multi": "paragraph,strong,em,hyperlink,list-item,o-list-item"
+          },
+          "type": "StructuredText"
+        }
+      },
+      "version": ""
+    }
+  ]
+}

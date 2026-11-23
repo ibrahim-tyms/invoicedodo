@@ -1,0 +1,51 @@
+{
+  "id": "pros_cons",
+  "name": "Pros and Cons",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "description": "Default",
+      "docURL": "",
+      "id": "default",
+      "imageUrl": "",
+      "name": "Default",
+      "primary": {
+        "heading": {
+          "config": {
+            "label": "Heading (optional)"
+          },
+          "type": "Text"
+        },
+        "pros": {
+          "config": {
+            "fields": {
+              "text": {
+                "config": {
+                  "label": "Pro"
+                },
+                "type": "Text"
+              }
+            },
+            "label": "Pros"
+          },
+          "type": "Group"
+        },
+        "cons": {
+          "config": {
+            "fields": {
+              "text": {
+                "config": {
+                  "label": "Con"
+                },
+                "type": "Text"
+              }
+            },
+            "label": "Cons"
+          },
+          "type": "Group"
+        }
+      },
+      "version": ""
+    }
+  ]
+}

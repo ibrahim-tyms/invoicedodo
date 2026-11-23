@@ -1,0 +1,29 @@
+{
+  "id": "data_table",
+  "name": "Data Table",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "description": "Default",
+      "docURL": "",
+      "id": "default",
+      "imageUrl": "",
+      "name": "Default",
+      "primary": {
+        "table": {
+          "config": {
+            "label": "Table (first row is the header)"
+          },
+          "type": "Table"
+        },
+        "caption": {
+          "config": {
+            "label": "Caption, e.g. Prices checked on vendor pages, Month YYYY"
+          },
+          "type": "Text"
+        }
+      },
+      "version": ""
+    }
+  ]
+}

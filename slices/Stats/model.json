@@ -1,0 +1,55 @@
+{
+  "id": "stats",
+  "name": "Stats",
+  "type": "SharedSlice",
+  "variations": [
+    {
+      "description": "Default",
+      "docURL": "",
+      "id": "default",
+      "imageUrl": "",
+      "name": "Default",
+      "primary": {
+        "items": {
+          "config": {
+            "fields": {
+              "value": {
+                "config": {
+                  "label": "Value, e.g. 85%"
+                },
+                "type": "Text"
+              },
+              "label": {
+                "config": {
+                  "label": "Label"
+                },
+                "type": "Text"
+              },
+              "source": {
+                "config": {
+                  "customtypes": [
+                    {
+                      "fields": [
+                        "title",
+                        "publisher",
+                        "url",
+                        "year"
+                      ],
+                      "id": "source"
+                    }
+                  ],
+                  "label": "Source",
+                  "select": "document"
+                },
+                "type": "Link"
+              }
+            },
+            "label": "Stats"
+          },
+          "type": "Group"
+        }
+      },
+      "version": ""
+    }
+  ]
+}

@@ -1,0 +1,252 @@
+{
+  "format": "page",
+  "id": "blog_post",
+  "json": {
+    "Main": {
+      "uid": {
+        "config": {
+          "label": "UID"
+        },
+        "type": "UID"
+      },
+      "title": {
+        "config": {
+          "label": "Title (H1)",
+          "single": "heading1"
+        },
+        "type": "StructuredText"
+      },
+      "excerpt": {
+        "config": {
+          "label": "Excerpt (150 to 200 characters)",
+          "placeholder": "State the reader pain and what they will get"
+        },
+        "type": "Text"
+      },
+      "featured_image": {
+        "config": {
+          "label": "Cover image (2400x1350)"
+        },
+        "type": "Image"
+      },
+      "category": {
+        "config": {
+          "customtypes": [
+            {
+              "fields": [
+                "name"
+              ],
+              "id": "blog_category"
+            }
+          ],
+          "label": "Primary category",
+          "select": "document"
+        },
+        "type": "Link"
+      },
+      "author": {
+        "config": {
+          "customtypes": [
+            {
+              "fields": [
+                "name",
+                "role",
+                "avatar"
+              ],
+              "id": "author"
+            }
+          ],
+          "label": "Author",
+          "select": "document"
+        },
+        "type": "Link"
+      },
+      "reviewer": {
+        "config": {
+          "customtypes": [
+            {
+              "fields": [
+                "name",
+                "role"
+              ],
+              "id": "author"
+            }
+          ],
+          "label": "Fact-checked or reviewed by",
+          "select": "document"
+        },
+        "type": "Link"
+      },
+      "published_date": {
+        "config": {
+          "label": "Published date"
+        },
+        "type": "Date"
+      },
+      "updated_date": {
+        "config": {
+          "label": "Last meaningful update"
+        },
+        "type": "Date"
+      },
+      "key_takeaways": {
+        "config": {
+          "fields": {
+            "point": {
+              "config": {
+                "label": "Takeaway"
+              },
+              "type": "Text"
+            }
+          },
+          "label": "Key takeaways (the short answer)"
+        },
+        "type": "Group"
+      },
+      "faqs": {
+        "config": {
+          "fields": {
+            "question": {
+              "config": {
+                "label": "Question"
+              },
+              "type": "Text"
+            },
+            "answer": {
+              "config": {
+                "label": "Answer",
+                "multi": "paragraph,strong,em,hyperlink,list-item"
+              },
+              "type": "StructuredText"
+            }
+          },
+          "label": "FAQs (8 to 10 People Also Ask questions)"
+        },
+        "type": "Group"
+      },
+      "references": {
+        "config": {
+          "fields": {
+            "source": {
+              "config": {
+                "customtypes": [
+                  {
+                    "fields": [
+                      "title",
+                      "publisher",
+                      "url",
+                      "year"
+                    ],
+                    "id": "source"
+                  }
+                ],
+                "label": "Source",
+                "select": "document"
+              },
+              "type": "Link"
+            }
+          },
+          "label": "References (sources cited in the article)"
+        },
+        "type": "Group"
+      },
+      "related_posts": {
+        "config": {
+          "fields": {
+            "post": {
+              "config": {
+                "customtypes": [
+                  "blog_post"
+                ],
+                "label": "Post",
+                "select": "document"
+              },
+              "type": "Link"
+            }
+          },
+          "label": "Related posts (optional, otherwise automatic)"
+        },
+        "type": "Group"
+      },
+      "slices": {
+        "config": {
+          "choices": {
+            "rich_text": {
+              "type": "SharedSlice"
+            },
+            "callout": {
+              "type": "SharedSlice"
+            },
+            "figure": {
+              "type": "SharedSlice"
+            },
+            "data_table": {
+              "type": "SharedSlice"
+            },
+            "quote": {
+              "type": "SharedSlice"
+            },
+            "stats": {
+              "type": "SharedSlice"
+            },
+            "pros_cons": {
+              "type": "SharedSlice"
+            },
+            "cta": {
+              "type": "SharedSlice"
+            },
+            "video": {
+              "type": "SharedSlice"
+            }
+          }
+        },
+        "fieldset": "Slice Zone",
+        "type": "Slices"
+      }
+    },
+    "SEO & Metadata": {
+      "meta_title": {
+        "config": {
+          "label": "Meta Title",
+          "placeholder": "A title of the page used for social media and search engines"
+        },
+        "type": "Text"
+      },
+      "meta_description": {
+        "config": {
+          "label": "Meta Description",
+          "placeholder": "A brief summary of the page"
+        },
+        "type": "Text"
+      },
+      "meta_image": {
+        "config": {
+          "constraint": {
+            "height": 1260,
+            "width": 2400
+          },
+          "label": "Meta Image",
+          "thumbnails": []
+        },
+        "type": "Image"
+      },
+      "canonical_url": {
+        "config": {
+          "label": "Canonical URL (only if first published elsewhere)",
+          "select": "web"
+        },
+        "type": "Link"
+      },
+      "noindex": {
+        "config": {
+          "default_value": false,
+          "label": "Hide from search engines"
+        },
+        "type": "Boolean"
+      }
+    }
+  },
+  "label": "Blog Post",
+  "repeatable": true,
+  "status": true
+}
