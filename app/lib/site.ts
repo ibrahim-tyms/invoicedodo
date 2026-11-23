@@ -3,6 +3,10 @@ export const SITE = {
   name: "InvoiceDodo",
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://invoicedodo.com").replace(/\/$/, ""),
   tagline: "Get paid on time. Without the awkward chase.",
+  /** Home page search title (about 60 characters) and meta description (about 150). Keyword first, brand last. */
+  homeTitle: "Free Invoice Software With Automatic Reminders | InvoiceDodo",
+  homeDescription:
+    "Free invoicing software for freelancers and small businesses. Automatic payment reminders, tax set-asides and 1099-ready totals, so you get paid on time.",
   description:
     "InvoiceDodo builds your invoice from a sentence, sends it, and follows up politely until you're paid. Keep your Stripe, PayPal or Square account, see what to set aside for taxes, and stop chasing clients. Free to use.",
   locale: "en_US",

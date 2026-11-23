@@ -5,6 +5,8 @@ import { ClientTabs } from "./components/ClientTabs";
 import { Headline, Kicker, Stage } from "./components/Frame";
 import { HeroDemo } from "./components/HeroDemo";
 import { DodoMascot } from "./components/Mascot";
+import { MobileMenu } from "./components/MobileMenu";
+import { StickyNav } from "./components/StickyNav";
 import { WaitlistForm } from "./components/WaitlistForm";
 import { ORG_ID, SITE, WEBSITE_ID, jsonLd, organizationLd, websiteLd } from "./lib/site";
 
@@ -20,8 +22,8 @@ export default async function Home() {
         "@type": "WebPage",
         "@id": `${SITE.url}/#webpage`,
         url: SITE.url,
-        name: "InvoiceDodo: Invoicing That Chases Late Payments For You",
-        description: SITE.description,
+        name: SITE.homeTitle,
+        description: SITE.homeDescription,
         isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": `${SITE.url}/#app` },
         inLanguage: "en-US",
@@ -66,33 +68,47 @@ export default async function Home() {
         Skip to content
       </a>
 
+      <StickyNav>
+        <div className="wrap">
+        <nav className="nav" aria-label="Main">
+          <a href="#top" className="nav-logo" aria-label="InvoiceDodo home">
+            <Logo height={30} />
+          </a>
+          <ul className="nav-links">
+            <li>
+              <a href="#get-paid">Get paid</a>
+            </li>
+            <li>
+              <a href="#taxes">Taxes</a>
+            </li>
+            <li>
+              <a href="#pricing">Pricing</a>
+            </li>
+            {hasPosts && (
+              <li>
+                <Link href="/blog">Blog</Link>
+              </li>
+            )}
+          </ul>
+          <a href="#join" className="btn btn-primary btn-sm nav-cta">
+            Get early access
+          </a>
+          <MobileMenu
+            items={[
+              { href: "#get-paid", label: "Get paid" },
+              { href: "#taxes", label: "Taxes" },
+              { href: "#pricing", label: "Pricing" },
+              { href: "#faq", label: "FAQ" },
+              ...(hasPosts ? [{ href: "/blog", label: "Blog" }] : []),
+            ]}
+          />
+        </nav>
+        </div>
+      </StickyNav>
+
       {/* ===================== HERO (mint) ===================== */}
       <header className="hero" data-accent="mint">
         <div className="wrap">
-          <nav className="nav" aria-label="Main">
-            <a href="#top" className="nav-logo" aria-label="InvoiceDodo home">
-              <Logo height={30} />
-            </a>
-            <ul className="nav-links">
-              <li>
-                <a href="#get-paid">Get paid</a>
-              </li>
-              <li>
-                <a href="#taxes">Taxes</a>
-              </li>
-              <li>
-                <a href="#pricing">Pricing</a>
-              </li>
-              {hasPosts && (
-                <li>
-                  <Link href="/blog">Blog</Link>
-                </li>
-              )}
-            </ul>
-            <a href="#join" className="btn btn-primary btn-sm">
-              Get early access
-            </a>
-          </nav>
 
           <div className="hero-top" id="top">
             <div>
@@ -100,8 +116,8 @@ export default async function Home() {
             </div>
             <div className="hero-side">
               <p className="lead">
-                Describe your work and Dodo builds the invoice, sends it, and follows up for you,
-                politely, before it ever gets awkward.
+                Free invoicing software that sends your invoices, chases them for you, and tells you
+                what to set aside for tax.
               </p>
               <div id="join" className="anchor-target">
                 <WaitlistForm source="hero" />

@@ -22,10 +22,10 @@ const instrumentSans = Instrument_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: "InvoiceDodo: Invoicing That Chases Late Payments For You",
+    default: SITE.homeTitle,
     template: "%s | InvoiceDodo",
   },
-  description: SITE.description,
+  description: SITE.homeDescription,
   applicationName: SITE.name,
   category: "business",
   keywords: [
@@ -49,9 +49,9 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: SITE.locale,
     url: "/",
-    title: "InvoiceDodo: Get paid on time. Without the awkward chase.",
+    title: "InvoiceDodo: Free invoicing that chases late payments for you",
     description:
-      "Describe the work and Dodo builds the invoice, sends it and follows up politely until you're paid. Keep your Stripe, PayPal or Square account. Free to use.",
+      "Dodo builds the invoice, sends it, follows up politely until you're paid, and tells you what to set aside for tax. Keep your Stripe, PayPal or Square account. Free.",
   },
   twitter: {
     card: "summary_large_image",
