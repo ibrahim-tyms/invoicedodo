@@ -38,7 +38,7 @@ RESEND_SEGMENT_ID=...
 
 ## Notes
 
-- Illustrative figures in the mockups (fee $9.12, tax set-aside $283, client names) are examples, not product promises.
+- Illustrative figures in the mockups (the $1,140 payment, tax set-aside $285, client names) are examples, not product promises.
 - No unverified statistics are published on the page (see `../research/us-pain-points.md`, "verify before publishing").
 
 ## Blog (Prismic)

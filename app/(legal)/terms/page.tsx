@@ -118,7 +118,12 @@ const sections: LegalSection[] = [
             hosted invoice pages where your clients can pay, ask questions, promise a payment date,
             download documents or forward the invoice to their finance team;
           </li>
-          <li>online payments processed by Stripe, and payout tracking;</li>
+          <li>
+            online payments through a payment provider you connect, such as Stripe, PayPal or
+            Square, and tracking of those payments and payouts;
+          </li>
+          <li>recording payments you receive outside the Service, such as by Zelle, check or bank transfer;</li>
+          <li>syncing paid invoices to accounting software you connect, such as Tyms, QuickBooks or Xero;</li>
           <li>preparing documents such as Form W-9 bundles at your request; and</li>
           <li>informational tools such as tax set-aside estimates and sales-tax guidance.</li>
         </ul>
@@ -213,40 +218,37 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Online payments through InvoiceDodo are processed by Stripe, Inc. and its affiliates
-          (&ldquo;Stripe&rdquo;). To accept payments, you must create or connect a Stripe account
-          and agree to the{" "}
-          <a href="https://stripe.com/legal/connect-account" rel="noopener noreferrer">
-            Stripe Connected Account Agreement
-          </a>
-          , which includes the{" "}
-          <a href="https://stripe.com/legal/ssa" rel="noopener noreferrer">
-            Stripe Services Agreement
-          </a>{" "}
-          (together, the &ldquo;Stripe Terms&rdquo;). You authorize us to share information about
-          you and your transactions with Stripe and to receive information from Stripe to provide
-          the Service.
+          To accept online payments, you connect your own account with a third-party payment
+          provider that the Service supports, such as Stripe, PayPal or Square (each a
+          &ldquo;Payment Provider&rdquo;). Your relationship with each Payment Provider is
+          governed by your own agreement with it, including its terms of service, fees and
+          policies (the &ldquo;Provider Terms&rdquo;). You authorize us to share information about
+          you and your invoices with the Payment Providers you connect, and to receive information
+          from them (such as payment and payout status), to provide the Service.
         </p>
         <ul>
           <li>
             <strong>We do not hold your money.</strong> {C} is not a bank, money transmitter,
-            escrow agent or payment processor. Funds move between your clients, Stripe and your
-            bank account under the Stripe Terms.
+            escrow agent or payment processor, and never receives, holds or pays out your funds.
+            When a client pays online, the payment goes directly to your account with your Payment
+            Provider, and funds move between your clients, your Payment Provider and your bank
+            account under the Provider Terms.
           </li>
           <li>
-            <strong>Verification and holds.</strong> Stripe may ask for information to verify your
-            identity or business, and may delay, hold or reverse payments or payouts under the
-            Stripe Terms. We aim to show you clearly where your money is, but we do not control
-            Stripe&rsquo;s decisions and are not responsible for them.
+            <strong>Provider fees, verification and holds.</strong> Your Payment Provider sets its
+            own processing fees and may ask for information to verify your identity or business,
+            and may delay, hold or reverse payments or payouts under the Provider Terms. We aim to
+            show you clearly where your money is, but we do not control your Payment
+            Provider&rsquo;s decisions and are not responsible for them.
           </li>
           <li>
             <strong>Refunds, disputes and chargebacks</strong> are your responsibility, including
-            any amounts and fees Stripe charges back to you.
+            any amounts and fees your Payment Provider charges back to you.
           </li>
           <li>
-            <strong>Offline payments.</strong> If you mark an invoice as paid by check, bank
+            <strong>Offline payments.</strong> If you mark an invoice as paid by Zelle, check, bank
             transfer or another method outside the Service, you are responsible for the accuracy
-            of that record.
+            of that record. We do not process or verify these payments.
           </li>
         </ul>
       </>
@@ -264,10 +266,11 @@ const sections: LegalSection[] = [
             core features without giving you at least 30 days&rsquo; notice.
           </li>
           <li>
-            <strong>Payment processing fees.</strong> When a client pays you online, processing
-            fees apply. We show the applicable fee, and the amount you are expected to receive,
-            before you send an invoice. Fees are deducted from the payment before it is paid out to
-            you.
+            <strong>No fees on your payments.</strong> We do not charge a fee on payments your
+            clients make to you. When a client pays online, the payment is processed by the payment
+            provider you connect (such as Stripe, PayPal or Square) under your own account with that
+            provider, and that provider&rsquo;s fees and terms apply. We do not deduct anything
+            from your payments.
           </li>
           <li>
             <strong>Optional paid features.</strong> We may offer optional paid features in the
@@ -319,7 +322,7 @@ const sections: LegalSection[] = [
     title: "Not tax, legal or financial advice",
     body: (
       <p>
-        Tax set-aside estimates, sales-tax guidance, fee previews, payout dates and similar
+        Tax set-aside estimates, sales-tax guidance, expected payout dates and similar
         information are provided for convenience only. They are general estimates based on the
         information available to us, not tax, legal, accounting or financial advice, and may not
         fit your situation. {C} is not a tax preparer, accountant or law firm. Talk to a qualified
@@ -343,8 +346,8 @@ const sections: LegalSection[] = [
             social engineering;
           </li>
           <li>
-            sell or invoice for illegal goods or services, or for any business Stripe does not
-            support;
+            sell or invoice for illegal goods or services, or for any business or activity your
+            Payment Provider does not support;
           </li>
           <li>
             send spam, or send invoices or reminders to people who have no business relationship
@@ -368,8 +371,8 @@ const sections: LegalSection[] = [
           <li>use the Service in violation of any law, including sanctions and export laws.</li>
         </ul>
         <p>
-          We may investigate suspected violations and work with law enforcement, Stripe or other
-          affected parties where appropriate.
+          We may investigate suspected violations and work with law enforcement, Payment
+          Providers or other affected parties where appropriate.
         </p>
       </>
     ),
@@ -403,10 +406,10 @@ const sections: LegalSection[] = [
     title: "Third-party services",
     body: (
       <p>
-        The Service works with services we do not control, such as Stripe, email providers and
-        sign-in providers. Your use of them is governed by their own terms and privacy policies.
-        We are not responsible for third-party services, and their availability may affect the
-        Service.
+        The Service works with services we do not control, such as Payment Providers,
+        accounting software you connect, email providers and sign-in providers. Your use of them
+        is governed by their own terms and privacy policies. We are not responsible for
+        third-party services, and their availability may affect the Service.
       </p>
     ),
   },
@@ -435,7 +438,7 @@ const sections: LegalSection[] = [
           </li>
           <li>
             <strong>By us.</strong> We may suspend or end your access if you breach these Terms,
-            create risk or possible legal exposure for us, Stripe, your clients or other users, if
+            create risk or possible legal exposure for us, a Payment Provider, your clients or other users, if
             required by law, or if we stop offering the Service. Where reasonable, we will tell you
             first and give you a chance to fix the problem.
           </li>
@@ -504,7 +507,7 @@ const sections: LegalSection[] = [
         and agents from claims, losses, liabilities, damages, fines and expenses (including
         reasonable attorneys&rsquo; fees) arising from: Your Content; your invoices and your
         dealings with your clients; messages sent on your behalf through the Service in line with
-        your settings; your breach of these Terms or of the Stripe Terms; or your violation of any
+        your settings; your breach of these Terms or of any Provider Terms; or your violation of any
         law or third-party right. We will tell you about any such claim and may participate in the
         defense with counsel of our choice at our own expense.
       </p>
@@ -605,7 +608,7 @@ const sections: LegalSection[] = [
         <li>
           <strong>Force majeure.</strong> We are not responsible for delays or failures caused by
           events beyond our reasonable control, including outages of third-party services such as
-          Stripe or email providers.
+          Payment Providers or email providers.
         </li>
         <li>
           <strong>Electronic communications.</strong> You agree that we may provide notices and
@@ -665,8 +668,8 @@ export default function TermsPage() {
         <>Joining the waitlist doesn&rsquo;t guarantee access, and early-access features can change.</>,
         <>You own your invoices and data. We only use them to run InvoiceDodo for you.</>,
         <>Reminders go out in your name, on your settings. You&rsquo;re responsible for what you bill and send.</>,
-        <>Payments run through Stripe. We never hold your money, and Stripe&rsquo;s own terms apply.</>,
-        <>Core features are free. Processing fees are shown before you send, and we give 30 days&rsquo; notice of any fee change.</>,
+        <>Clients pay you through the provider you connect (such as Stripe, PayPal or Square). We never hold your money, and your provider&rsquo;s own terms apply.</>,
+        <>Core features are free, and we take no fee from your payments. Your payment provider&rsquo;s own fees apply. We give 30 days&rsquo; notice of any fee change.</>,
         <>AI drafts and tax estimates are helpers, not advice. Always check before you send.</>,
         <>Disputes go to individual arbitration unless you opt out within 30 days.</>,
       ]}

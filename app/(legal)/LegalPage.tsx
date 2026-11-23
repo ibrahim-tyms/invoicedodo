@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Logo } from "../components/Brand";
+import { SiteFooter } from "../components/SiteFooter";
+import { SiteNav } from "../components/SiteNav";
 import { LEGAL } from "./config";
 import { SITE, WEBSITE_ID, absoluteUrl, breadcrumbLd, jsonLd } from "../lib/site";
 
@@ -48,15 +49,8 @@ export function LegalPage({
       <a href="#legal-main" className="skip">
         Skip to content
       </a>
+      <SiteNav />
       <header className="legal-top">
-        <div className="wrap legal-nav">
-          <Link href="/" className="nav-logo" aria-label="InvoiceDodo home">
-            <Logo height={28} />
-          </Link>
-          <Link href="/#join" className="btn btn-primary btn-sm">
-            Get early access
-          </Link>
-        </div>
         <div className="wrap legal-hero">
           <p className="kicker">Legal</p>
           <h1 className="h2">{title}</h1>
@@ -108,21 +102,15 @@ export function LegalPage({
         </main>
       </div>
 
-      <footer className="legal-foot">
-        <div className="wrap foot-base">
-          <Link href="/" aria-label="InvoiceDodo home" className="foot-logo">
-            <Logo height={24} />
-          </Link>
-          <nav aria-label="Legal" className="legal-foot-links">
-            <Link href="/privacy">Privacy Policy</Link>
-            <Link href="/terms">Terms of Service</Link>
+      <SiteFooter
+        source="legal-footer"
+        legalNote={
+          <>
+            © 2026 {LEGAL.company} · {LEGAL.product} is a product of {LEGAL.company} ·{" "}
             <a href={`mailto:${LEGAL.privacyEmail}`}>{LEGAL.privacyEmail}</a>
-          </nav>
-          <span className="foot-copy">
-            © 2026 {LEGAL.company} · {LEGAL.product} is a product of {LEGAL.company}
-          </span>
-        </div>
-      </footer>
+          </>
+        }
+      />
     </>
   );
 }

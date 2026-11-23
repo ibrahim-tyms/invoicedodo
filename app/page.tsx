@@ -1,18 +1,15 @@
-import Link from "next/link";
-import { Dodo, Logo } from "./components/Brand";
-import { getPosts } from "./lib/blog";
+import { Dodo } from "./components/Brand";
 import { ClientTabs } from "./components/ClientTabs";
 import { Headline, Kicker, Stage } from "./components/Frame";
 import { HeroDemo } from "./components/HeroDemo";
 import { DodoMascot } from "./components/Mascot";
-import { MobileMenu } from "./components/MobileMenu";
-import { StickyNav } from "./components/StickyNav";
+import { SiteFooter } from "./components/SiteFooter";
+import { SiteNav } from "./components/SiteNav";
 import { WaitlistForm } from "./components/WaitlistForm";
 import { ORG_ID, SITE, WEBSITE_ID, jsonLd, organizationLd, websiteLd } from "./lib/site";
 
 export default async function Home() {
   // Blog link appears in the nav once the first post is published (revalidated by the Prismic webhook).
-  const hasPosts = (await getPosts()).length > 0;
   const ld = {
     "@context": "https://schema.org",
     "@graph": [
@@ -68,43 +65,7 @@ export default async function Home() {
         Skip to content
       </a>
 
-      <StickyNav>
-        <div className="wrap">
-        <nav className="nav" aria-label="Main">
-          <a href="#top" className="nav-logo" aria-label="InvoiceDodo home">
-            <Logo height={30} />
-          </a>
-          <ul className="nav-links">
-            <li>
-              <a href="#get-paid">Get paid</a>
-            </li>
-            <li>
-              <a href="#taxes">Taxes</a>
-            </li>
-            <li>
-              <a href="#pricing">Pricing</a>
-            </li>
-            {hasPosts && (
-              <li>
-                <Link href="/blog">Blog</Link>
-              </li>
-            )}
-          </ul>
-          <a href="#join" className="btn btn-primary btn-sm nav-cta">
-            Get early access
-          </a>
-          <MobileMenu
-            items={[
-              { href: "#get-paid", label: "Get paid" },
-              { href: "#taxes", label: "Taxes" },
-              { href: "#pricing", label: "Pricing" },
-              { href: "#faq", label: "FAQ" },
-              ...(hasPosts ? [{ href: "/blog", label: "Blog" }] : []),
-            ]}
-          />
-        </nav>
-        </div>
-      </StickyNav>
+      <SiteNav onHome />
 
       {/* ===================== HERO (mint) ===================== */}
       <header className="hero" data-accent="mint">
@@ -418,7 +379,7 @@ export default async function Home() {
                 <div className="sch-head">
                   <div>
                     <span className="label">Payment received · #1042</span>
-                    <b>Acme Studio · $1,130.88</b>
+                    <b>Acme Studio · $1,140.00</b>
                   </div>
                   <span className="status s-paid">Paid</span>
                 </div>
@@ -426,7 +387,7 @@ export default async function Home() {
                 <div className="tx-aside">
                   <div>
                     <span className="label">Put aside for taxes</span>
-                    <span className="tx-amt">$282.72</span>
+                    <span className="tx-amt">$285.00</span>
                   </div>
                   <span className="tx-rate">25% of this payment</span>
                 </div>
@@ -481,7 +442,7 @@ export default async function Home() {
                     <span className="sch-dot" />
                     <div>
                       <b>Paid by Acme</b>
-                      <span>Fri, Dec 15 · Bank transfer</span>
+                      <span>Fri, Dec 15 · Bank transfer via your Stripe</span>
                     </div>
                   </li>
                   <li className="done">
@@ -505,12 +466,12 @@ export default async function Home() {
                     <dd>$1,140.00</dd>
                   </div>
                   <div>
-                    <dt>Processing fee</dt>
-                    <dd>−$9.12</dd>
+                    <dt>InvoiceDodo fee</dt>
+                    <dd>$0.00</dd>
                   </div>
                   <div className="you-get">
-                    <dt>You receive</dt>
-                    <dd>$1,130.88</dd>
+                    <dt>Paid into</dt>
+                    <dd>Your Stripe account</dd>
                   </div>
                 </dl>
               </div>
@@ -518,13 +479,14 @@ export default async function Home() {
 
             <div className="split-text">
               <Kicker>Pricing</Kicker>
-              <Headline id="pr-h" lead="Free to use." highlight="No surprises." />
+              <Headline id="pr-h" lead="Free to use." highlight="We don't take a cut." />
               <p className="body-lg">
-                Invoices, clients and reminders cost nothing. When a client pays online, a small
-                processing fee applies, and you see exactly what you&rsquo;ll receive before you
-                send.
+                Invoices, clients and reminders cost nothing, and InvoiceDodo never takes a fee from
+                your payments. Clients pay through the Stripe, PayPal or Square account you connect,
+                at that provider&rsquo;s usual rates, or by Zelle, check or bank transfer.
               </p>
               <ul className="ticks">
+                <li>No InvoiceDodo fee on any payment</li>
                 <li>Unlimited invoices and clients</li>
                 <li>Automatic reminders included, not an upgrade</li>
                 <li>You always see where your money is</li>
@@ -555,33 +517,7 @@ export default async function Home() {
       </main>
 
       {/* ===================== FOOTER (mint) ===================== */}
-      <footer className="foot" data-accent="mint">
-        <div className="wrap">
-          <div className="foot-cta">
-            <div className="foot-cta-text">
-              <DodoMascot pose="fly" size={84} delay={1.7} className="foot-dodo" />
-              <Headline lead="Your next invoice," highlight="paid by Friday." />
-              <p className="body-lg">
-                We&rsquo;re letting people in a few at a time. Leave your email and Dodo will save you
-                a spot.
-              </p>
-            </div>
-            <WaitlistForm source="footer" />
-          </div>
-
-          <div className="foot-base">
-            <a href="#top" aria-label="InvoiceDodo home" className="foot-logo">
-              <Logo height={26} />
-            </a>
-            <p className="foot-tag">The awkward chase is going the way of the dodo.</p>
-            <nav aria-label="Legal" className="legal-foot-links">
-              <a href="/privacy">Privacy</a>
-              <a href="/terms">Terms</a>
-            </nav>
-            <span className="foot-copy">© 2026 InvoiceDodo</span>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter source="footer" onHome />
     </>
   );
 }
@@ -617,7 +553,7 @@ const FAQ = [
   },
   {
     q: "What does it cost?",
-    a: "Sending invoices and reminders is free. When a client pays online, a small processing fee applies, and it's shown before you send.",
+    a: "Nothing. Sending invoices and reminders is free, and InvoiceDodo doesn't take a fee from your payments. When a client pays online, the money goes to the Stripe, PayPal or Square account you connect, and only that provider's usual fees apply.",
   },
   {
     q: "Will reminders annoy my clients?",

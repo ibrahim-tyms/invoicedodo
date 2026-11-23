@@ -9,6 +9,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     { url: absoluteUrl("/"), changeFrequency: "weekly", priority: 1 },
+    ...["/invoice-generator", "/receipt-maker", "/estimate-generator", "/proforma-invoice"].map((path) => ({
+      url: absoluteUrl(path),
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    })),
     { url: absoluteUrl("/blog"), lastModified: latest, changeFrequency: "daily", priority: 0.9 },
     ...live.map((p) => ({
       url: absoluteUrl(`/blog/${p.uid}`),

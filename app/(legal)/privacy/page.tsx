@@ -102,18 +102,20 @@ const sections: LegalSection[] = [
 
         <h3>3.4 Payment and payout information</h3>
         <p>
-          Online payments are processed by our payment partner, Stripe. To receive payments, you
-          will connect or create a Stripe account, and Stripe will collect the information it
-          needs to verify your identity and pay you, such as your legal name, date of birth,
-          address, government identification number and bank account details. Stripe handles
-          that information under its own privacy policy.
+          InvoiceDodo does not process payments itself. To accept online payments, you connect
+          your own account with a payment provider such as Stripe, PayPal or Square, and your
+          clients&rsquo; payments go directly to that account. Your payment provider collects the
+          information it needs to verify your identity and pay you, such as your legal name, date
+          of birth, address, government identification number and bank account details, and
+          handles that information under its own privacy policy.
         </p>
         <p>
           We do <strong>not</strong> receive or store full card numbers or full bank account
-          numbers. We receive limited information from Stripe, such as your account and
-          verification status, the last digits of a bank account, payment amounts, fees, payment
-          method types, payout schedules and payout status, so we can show you where your money
-          is.
+          numbers. When you connect a payment provider, we receive limited information from it,
+          such as your account identifier and connection status, payment amounts, the
+          provider&rsquo;s fees, payment method types and payout status, so we can show you where
+          your money is. If you mark an invoice as paid by Zelle, check, bank transfer or another
+          offline method, we store the payment details you enter.
         </p>
 
         <h3>3.5 Tax information</h3>
@@ -174,7 +176,8 @@ const sections: LegalSection[] = [
         <p>We may receive information about you from:</p>
         <ul>
           <li>
-            <strong>Stripe</strong>, about your account status, payments and payouts;
+            <strong>payment providers you connect</strong>, such as Stripe, PayPal or Square,
+            about your account status, payments and payouts;
           </li>
           <li>
             <strong>sign-in providers</strong>, if you choose to sign in with a third-party
@@ -220,8 +223,8 @@ const sections: LegalSection[] = [
             payable team; and
           </li>
           <li>
-            payment status. Your card or bank details are entered directly with Stripe, not
-            stored by us.
+            payment status. Card or bank details are entered directly with the business&rsquo;s
+            payment provider, not stored by us.
           </li>
         </ul>
         <p>
@@ -257,8 +260,9 @@ const sections: LegalSection[] = [
             payments, and show payout status.
           </li>
           <li>
-            <strong>Process payments</strong> through Stripe, show fees before you send, and keep
-            accurate payment records.
+            <strong>Connect payments</strong>: link your invoices to the payment provider you
+            connect, record payments you mark as received offline, keep accurate payment records,
+            and sync paid invoices to accounting software you connect.
           </li>
           <li>
             <strong>Prepare documents you request</strong>, such as W-9 forms and finance-team
@@ -344,8 +348,13 @@ const sections: LegalSection[] = [
             us under contracts that limit their use of it to providing services to us.
           </li>
           <li>
-            <strong>Stripe</strong>, to process payments and payouts and to verify identities as
-            required by financial regulations.
+            <strong>Payment providers you connect</strong>, such as Stripe, PayPal or Square, so
+            your clients can pay you. Each provider processes payments, payouts and identity
+            verification under its own terms and privacy policy.
+          </li>
+          <li>
+            <strong>Accounting software you connect</strong>, such as Tyms, QuickBooks or Xero, to
+            sync paid invoices and payment records at your direction.
           </li>
           <li>
             <strong>People you direct us to share with</strong>, such as the clients you invoice,
@@ -397,8 +406,8 @@ const sections: LegalSection[] = [
           </table>
         </div>
         <p>
-          As the Service launches, we will also use providers for payment processing (Stripe),
-          database hosting, file storage, AI models, and error monitoring. We will add each one to
+          As the Service launches, we will also use providers for database hosting, file storage,
+          AI models, and error monitoring. We will add each one to
           this list before it begins processing personal information. You can ask us for the
           current list at any time at {mail}.
         </p>
@@ -494,8 +503,8 @@ const sections: LegalSection[] = [
             access controls based on least privilege, and logging of administrative access; and
           </li>
           <li>
-            relying on Stripe, a PCI-DSS certified payment processor, for card and bank details so
-            those details never touch our servers.
+            leaving card and bank details to the payment providers you connect, so those details
+            never touch our servers.
           </li>
         </ul>
         <p>
@@ -587,19 +596,19 @@ const sections: LegalSection[] = [
                 <td>Identifiers</td>
                 <td>Name, email, IP address, account ID</td>
                 <td>You; your device; other users who invoice you</td>
-                <td>Service providers; Stripe; recipients you choose</td>
+                <td>Service providers; payment providers you connect; recipients you choose</td>
               </tr>
               <tr>
                 <td>Customer records</td>
                 <td>Business name, address, phone, limited payment details</td>
-                <td>You; Stripe</td>
-                <td>Service providers; Stripe; recipients you choose</td>
+                <td>You; payment providers you connect</td>
+                <td>Service providers; payment providers you connect; recipients you choose</td>
               </tr>
               <tr>
                 <td>Commercial information</td>
                 <td>Invoices, payments, payout history</td>
-                <td>You; your clients; Stripe</td>
-                <td>Service providers; Stripe; recipients you choose</td>
+                <td>You; your clients; payment providers you connect</td>
+                <td>Service providers; payment providers you connect; recipients you choose</td>
               </tr>
               <tr>
                 <td>Internet activity</td>
@@ -746,7 +755,7 @@ export default function PrivacyPage() {
           When the app launches, we will store your invoices and your clients&rsquo; details to send
           invoices and reminders on your behalf, and only for that.
         </>,
-        <>Card and bank details go straight to Stripe. They never touch our servers.</>,
+        <>Card and bank details go straight to the payment provider you connect. They never touch our servers.</>,
         <>Your content is not used to train AI models offered to other customers.</>,
         <>You can see, export or delete your information, and unsubscribe from any marketing email.</>,
       ]}
