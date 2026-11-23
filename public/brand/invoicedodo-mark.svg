@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="2 4 64 64" role="img" aria-label="InvoiceDodo">
+  <title>InvoiceDodo</title>
+  <!-- Head-only dodo: beak sits behind the head so the join follows the circle. -->
+  <path d="M34 24 Q58.4 21.6 62 39.6 Q62.9 50.4 53.9 49.5 Q55.7 43.2 45.8 42.3 L34 44 Z" fill="#F4A261"/>
+  <circle cx="26" cy="36" r="20" fill="#174E48"/>
+  <circle cx="31" cy="31" r="4.6" fill="#FFF8EF"/>
+  <circle cx="32.3" cy="31" r="2.3" fill="#242A29"/>
+</svg>
