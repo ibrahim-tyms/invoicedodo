@@ -1,7 +1,7 @@
 /** Site-wide facts used by metadata, structured data, sitemaps and social images. */
 export const SITE = {
   name: "InvoiceDodo",
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://invoicedodo.com").replace(/\/$/, ""),
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.invoicedodo.com").replace(/\/$/, ""),
   tagline: "Get paid on time. Without the awkward chase.",
   /** Home page search title (about 60 characters) and meta description (about 150). Keyword first, brand last. */
   homeTitle: "Free Invoice Software With Automatic Reminders | InvoiceDodo",

@@ -9,7 +9,7 @@ export default function Image() {
     kicker: "Legal",
     title: "Terms of Service",
     highlight: "The ground rules.",
-    footer: "invoicedodo.com/terms",
+    footer: "www.invoicedodo.com/terms",
     accent: "amber",
   });
 }

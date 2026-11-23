@@ -9,7 +9,7 @@ export default function Image() {
     kicker: "Legal",
     title: "Privacy Policy",
     highlight: "In plain English.",
-    footer: "invoicedodo.com/privacy",
+    footer: "www.invoicedodo.com/privacy",
     accent: "sky",
   });
 }

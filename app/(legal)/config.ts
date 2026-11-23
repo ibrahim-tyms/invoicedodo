@@ -9,7 +9,7 @@ export const LEGAL = {
   lastUpdated: "November 23, 2026",
 
   // TODO: confirm these before publishing.
-  website: "invoicedodo.com", // TODO: your production domain
+  website: "www.invoicedodo.com",
   mailingAddress: "[Tyms Inc. mailing address]", // TODO
   stateOfIncorporation: "[State of incorporation]", // TODO, e.g. Delaware
   governingLawState: "[Governing-law state]", // TODO: usually the state of incorporation

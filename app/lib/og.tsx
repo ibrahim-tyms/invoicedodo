@@ -31,7 +31,7 @@ export async function renderOg({
   kicker,
   title,
   highlight,
-  footer = "invoicedodo.com",
+  footer = "www.invoicedodo.com",
   accent = "mint",
 }: {
   kicker?: string;

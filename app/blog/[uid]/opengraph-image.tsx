@@ -30,7 +30,7 @@ export default async function Image({ params }: { params: Promise<{ uid: string 
   return renderOg({
     kicker: cat?.name ?? "Blog",
     title: postTitle(post),
-    footer: author?.name ? `By ${author.name} · invoicedodo.com/blog` : "invoicedodo.com/blog",
+    footer: author?.name ? `By ${author.name} · www.invoicedodo.com/blog` : "www.invoicedodo.com/blog",
     accent,
   });
 }

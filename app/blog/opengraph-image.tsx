@@ -9,7 +9,7 @@ export default function Image() {
     kicker: "Blog",
     title: "Get paid on time.",
     highlight: "Keep more of it.",
-    footer: "invoicedodo.com/blog",
+    footer: "www.invoicedodo.com/blog",
     accent: "sky",
   });
 }

@@ -53,7 +53,7 @@ Every post gets BlogPosting, BreadcrumbList and FAQPage structured data, a gener
 
 After deploying:
 ```bash
-npx prismic webhook create https://invoicedodo.com/api/revalidate --trigger documentsPublished --trigger documentsUnpublished
-npx prismic preview add https://invoicedodo.com/api/preview --name Production
-npx prismic preview set-simulator https://invoicedodo.com
+npx prismic webhook create https://www.invoicedodo.com/api/revalidate --trigger documentsPublished --trigger documentsUnpublished
+npx prismic preview add https://www.invoicedodo.com/api/preview --name Production
+npx prismic preview set-simulator https://www.invoicedodo.com
 ```
