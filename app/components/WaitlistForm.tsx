@@ -84,8 +84,7 @@ export function WaitlistForm({ source }: { source: string }) {
           ? state.message
           : (
             <>
-              Free to use. We&rsquo;ll only email you about InvoiceDodo. Unsubscribe anytime. See
-              our <a href="/privacy">Privacy Policy</a>.
+              No spam. Unsubscribe anytime. <a href="/privacy">Privacy</a>
             </>
           )}
       </p>

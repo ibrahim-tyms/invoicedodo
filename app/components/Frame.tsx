@@ -34,10 +34,13 @@ export function Stage({
   children,
   className = "",
   label = "Preview",
+  mascot,
 }: {
   children: ReactNode;
   className?: string;
   label?: string;
+  /** Optional dodo placed on the stage (positioned by its own class). */
+  mascot?: ReactNode;
 }) {
   return (
     <div className={`stage ${className}`}>
@@ -45,6 +48,7 @@ export function Stage({
         {label}
       </span>
       <div className="stage-inner">{children}</div>
+      {mascot}
     </div>
   );
 }

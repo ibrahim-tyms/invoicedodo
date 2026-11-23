@@ -4,8 +4,10 @@ import { LEGAL } from "../config";
 import { LegalPage, type LegalSection } from "../LegalPage";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy · InvoiceDodo",
-  description: `How ${LEGAL.company} collects, uses and protects information in InvoiceDodo.`,
+  title: "Privacy Policy",
+  description: "How InvoiceDodo collects, uses and protects your information, including waitlist, invoice, payment and tax data, and the choices you have.",
+  alternates: { canonical: "/privacy" },
+  openGraph: { type: "article", url: "/privacy", title: "Privacy Policy | InvoiceDodo" },
 };
 
 const C = LEGAL.company;
@@ -726,6 +728,8 @@ const sections: LegalSection[] = [
 export default function PrivacyPage() {
   return (
     <LegalPage
+      path="/privacy"
+      description={metadata.description as string}
       title="Privacy Policy"
       other={{ href: "/terms", label: "Terms of Service" }}
       intro={

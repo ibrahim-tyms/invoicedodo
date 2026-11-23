@@ -1,12 +1,67 @@
+import Link from "next/link";
 import { Dodo, Logo } from "./components/Brand";
+import { getPosts } from "./lib/blog";
 import { ClientTabs } from "./components/ClientTabs";
 import { Headline, Kicker, Stage } from "./components/Frame";
 import { HeroDemo } from "./components/HeroDemo";
+import { DodoMascot } from "./components/Mascot";
 import { WaitlistForm } from "./components/WaitlistForm";
+import { ORG_ID, SITE, WEBSITE_ID, jsonLd, organizationLd, websiteLd } from "./lib/site";
 
-export default function Home() {
+export default async function Home() {
+  // Blog link appears in the nav once the first post is published (revalidated by the Prismic webhook).
+  const hasPosts = (await getPosts()).length > 0;
+  const ld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      organizationLd,
+      websiteLd,
+      {
+        "@type": "WebPage",
+        "@id": `${SITE.url}/#webpage`,
+        url: SITE.url,
+        name: "InvoiceDodo: Invoicing That Chases Late Payments For You",
+        description: SITE.description,
+        isPartOf: { "@id": WEBSITE_ID },
+        about: { "@id": `${SITE.url}/#app` },
+        inLanguage: "en-US",
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": `${SITE.url}/#app`,
+        name: SITE.name,
+        applicationCategory: "BusinessApplication",
+        applicationSubCategory: "Invoicing",
+        operatingSystem: "Web",
+        description: SITE.description,
+        url: SITE.url,
+        publisher: { "@id": ORG_ID },
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD", availability: "https://schema.org/PreOrder" },
+        featureList: [
+          "Invoices drafted from a sentence or a file",
+          "Automatic, polite payment reminders",
+          "Client pay-date promises",
+          "Send invoice, W-9 and PO to the client's finance team",
+          "Works with Stripe, PayPal and Square",
+          "Syncs paid invoices to Tyms, QuickBooks or Xero",
+          "Tax set-aside on every payment",
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${SITE.url}/#faq`,
+        mainEntity: FAQ.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      },
+    ],
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(ld)} />
       <a href="#main" className="skip">
         Skip to content
       </a>
@@ -20,17 +75,19 @@ export default function Home() {
             </a>
             <ul className="nav-links">
               <li>
-                <a href="#follow-ups">How it works</a>
+                <a href="#get-paid">Get paid</a>
               </li>
               <li>
-                <a href="#clients">For your clients</a>
+                <a href="#taxes">Taxes</a>
               </li>
               <li>
                 <a href="#pricing">Pricing</a>
               </li>
-              <li>
-                <a href="#faq">FAQ</a>
-              </li>
+              {hasPosts && (
+                <li>
+                  <Link href="/blog">Blog</Link>
+                </li>
+              )}
             </ul>
             <a href="#join" className="btn btn-primary btn-sm">
               Get early access
@@ -39,7 +96,6 @@ export default function Home() {
 
           <div className="hero-top" id="top">
             <div>
-              <Kicker>Early access · Coming soon</Kicker>
               <Headline as="h1" lead="Get paid on time." highlight="Without the chase." />
             </div>
             <div className="hero-side">
@@ -53,7 +109,12 @@ export default function Home() {
             </div>
           </div>
 
-          <HeroDemo />
+          <div className="demo-wrap">
+            <span className="peek peek-demo" aria-hidden="true">
+              <DodoMascot pose="front" size={84} />
+            </span>
+            <HeroDemo />
+          </div>
         </div>
       </header>
 
@@ -94,7 +155,9 @@ export default function Home() {
               </ul>
             </div>
 
-            <Stage>
+            <Stage
+              mascot={<DodoMascot pose="peck" size={64} delay={1.3} className="stage-dodo stage-dodo-peck" />}
+            >
               <div className="sheet schedule">
                 <div className="sch-head">
                   <div>
@@ -248,24 +311,146 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ===================== PRICING (amber) ===================== */}
-        <section className="sec" id="pricing" data-accent="amber" aria-labelledby="pr-h">
-          <div className="wrap split">
+        {/* ===================== GET PAID YOUR WAY (sky) ===================== */}
+        <section className="sec" id="get-paid" data-accent="sky" aria-labelledby="gp-h">
+          <div className="wrap split split-rev">
+            <Stage
+              label="Connections"
+              mascot={
+                <span className="stage-dodo stage-dodo-fly" aria-hidden="true">
+                  <span className="dodo-bubble">Can&rsquo;t fly. Can match payments.</span>
+                  <DodoMascot pose="fly" size={70} delay={0.6} />
+                </span>
+              }
+            >
+              <div className="sheet connect">
+                <div className="sch-head">
+                  <div>
+                    <span className="label">Get paid with</span>
+                    <b>The accounts you already have</b>
+                  </div>
+                </div>
+                <ul className="cx-list">
+                  {PROVIDERS.map((p) => (
+                    <li key={p.name}>
+                      <span className="cx-logos" aria-hidden="true">
+                        {p.logos.map((l) => (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img key={l} src={`/integrations/${l}.svg`} alt="" width={20} height={20} />
+                        ))}
+                      </span>
+                      <div>
+                        <b>{p.name}</b>
+                        <span>{p.what}</span>
+                      </div>
+                      <span className={`status ${p.on ? "s-paid" : "s-draft"}`}>
+                        {p.on ? "Connected" : "Connect"}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="cx-match">
+                  <Dodo size={22} />
+                  <p>
+                    <b>$1,140 from Acme Studio landed in Stripe.</b> Matched to #1042, marked paid,
+                    reminders stopped.
+                  </p>
+                </div>
+              </div>
+            </Stage>
+
             <div className="split-text">
-              <Kicker>Pricing</Kicker>
-              <Headline id="pr-h" lead="Free to use." highlight="No surprises." />
+              <Kicker>Get paid your way</Kicker>
+              <Headline id="gp-h" lead="Keep how you get paid." highlight="Lose the chase." />
               <p className="body-lg">
-                Invoices, clients and reminders cost nothing. When a client pays online, a small
-                processing fee applies, and you see exactly what you&rsquo;ll receive before you
-                send.
+                Already take payments with Stripe, PayPal or Square? Connect it in a couple of
+                clicks. Your money keeps landing where it always has, at your usual rates. Dodo adds
+                the invoice, the client page and the follow-ups on top, and the moment a payment
+                lands it matches it to the invoice and stops the reminders.
               </p>
               <ul className="ticks">
-                <li>Unlimited invoices and clients</li>
-                <li>Automatic reminders included, not an upgrade</li>
-                <li>You always see where your money is</li>
+                <li>No new merchant account, no moving your payout history</li>
+                <li>Cards, Apple Pay, bank transfer, PayPal, Venmo: whatever your client prefers</li>
+                <li>Paid by Zelle or check? One tap marks it paid and keeps your records whole</li>
+                <li>Paid invoices sync to Tyms, QuickBooks or Xero, so your books stay in step</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* ===================== TAXES (amber) ===================== */}
+        <section className="sec" id="taxes" data-accent="amber" aria-labelledby="tx-h">
+          <div className="wrap split">
+            <div className="split-text">
+              <Kicker>Taxes</Kicker>
+              <Headline id="tx-h" lead="April stops being" highlight="a surprise." />
+              <p className="body-lg">
+                Every payment tells you what to put aside, so the quarterly bill is already covered
+                when it comes. Dodo answers the sales-tax question in plain English (for most
+                services, the answer is no) and keeps year-end totals ready for your accountant.
+              </p>
+              <ul className="ticks">
+                <li>A set-aside amount on every payment you receive</li>
+                <li>A heads-up before each quarterly estimated tax date</li>
+                <li>A plain-English sales-tax check for your work and your state</li>
+                <li>1099-ready totals per client, with W-9s kept alongside</li>
               </ul>
             </div>
 
+            <Stage label="Taxes">
+              <div className="sheet tax">
+                <div className="sch-head">
+                  <div>
+                    <span className="label">Payment received · #1042</span>
+                    <b>Acme Studio · $1,130.88</b>
+                  </div>
+                  <span className="status s-paid">Paid</span>
+                </div>
+
+                <div className="tx-aside">
+                  <div>
+                    <span className="label">Put aside for taxes</span>
+                    <span className="tx-amt">$282.72</span>
+                  </div>
+                  <span className="tx-rate">25% of this payment</span>
+                </div>
+
+                <div className="tx-pot">
+                  <div className="tx-pot-row">
+                    <span>Set aside this quarter</span>
+                    <b>$3,940 of ~$4,600</b>
+                  </div>
+                  <span className="tx-bar" aria-hidden="true">
+                    <span style={{ width: "86%" }} />
+                  </span>
+                  <span className="tx-due">Next estimated payment due Jan 15, 2027</span>
+                </div>
+
+                <ul className="tx-checks">
+                  <li>
+                    <span className="tx-ok" aria-hidden="true" />
+                    <div>
+                      <b>Sales tax: not needed</b>
+                      <span>Brand design for a client in Oregon. Oregon has no sales tax.</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span className="tx-ok" aria-hidden="true" />
+                    <div>
+                      <b>1099 total for Acme Studio: $14,820</b>
+                      <span>W-9 on file · Ready to share with your accountant</span>
+                    </div>
+                  </li>
+                </ul>
+                <p className="tx-note">Estimates to help you plan, not tax advice.</p>
+              </div>
+            </Stage>
+          </div>
+        </section>
+
+        {/* ===================== PRICING (mint) ===================== */}
+        <section className="sec" id="pricing" data-accent="mint" aria-labelledby="pr-h">
+          <div className="wrap split split-rev">
             <Stage>
               <div className="sheet payout">
                 <div className="sch-head">
@@ -314,15 +499,33 @@ export default function Home() {
                 </dl>
               </div>
             </Stage>
+
+            <div className="split-text">
+              <Kicker>Pricing</Kicker>
+              <Headline id="pr-h" lead="Free to use." highlight="No surprises." />
+              <p className="body-lg">
+                Invoices, clients and reminders cost nothing. When a client pays online, a small
+                processing fee applies, and you see exactly what you&rsquo;ll receive before you
+                send.
+              </p>
+              <ul className="ticks">
+                <li>Unlimited invoices and clients</li>
+                <li>Automatic reminders included, not an upgrade</li>
+                <li>You always see where your money is</li>
+              </ul>
+            </div>
           </div>
         </section>
 
         {/* ===================== FAQ ===================== */}
         <section className="sec faq-sec" id="faq" aria-labelledby="faq-h">
           <div className="wrap faq-wrap">
-            <h2 id="faq-h" className="h2 faq-h">
-              Questions
-            </h2>
+            <div className="faq-side">
+              <h2 id="faq-h" className="h2 faq-h">
+                Questions
+              </h2>
+              <DodoMascot pose="front" size={88} delay={2.1} className="faq-dodo" />
+            </div>
             <div className="faq">
               {FAQ.map((f) => (
                 <details key={f.q}>
@@ -339,7 +542,8 @@ export default function Home() {
       <footer className="foot" data-accent="mint">
         <div className="wrap">
           <div className="foot-cta">
-            <div>
+            <div className="foot-cta-text">
+              <DodoMascot pose="fly" size={84} delay={1.7} className="foot-dodo" />
               <Headline lead="Your next invoice," highlight="paid by Friday." />
               <p className="body-lg">
                 We&rsquo;re letting people in a few at a time. Leave your email and Dodo will save you
@@ -366,6 +570,14 @@ export default function Home() {
   );
 }
 
+const PROVIDERS = [
+  { name: "Stripe", logos: ["stripe", "applepay"], what: "Cards, Apple Pay, bank transfer (ACH)", on: true },
+  { name: "PayPal", logos: ["paypal", "venmo"], what: "PayPal and Venmo checkout", on: true },
+  { name: "Square", logos: ["square", "cashapp"], what: "Cards and Cash App Pay", on: false },
+  { name: "Tyms, QuickBooks or Xero", logos: ["tyms", "quickbooks", "xero"], what: "Paid invoices sync to your books", on: true },
+  { name: "Zelle, check or cash", logos: ["zelle"], what: "Mark it paid in one tap", on: true },
+];
+
 const FAQ = [
   {
     q: "When can I start using it?",
@@ -378,6 +590,14 @@ const FAQ = [
   {
     q: "Do my clients need an account?",
     a: "No. They get a link to your invoice, where they can pay, pick a pay date, ask a question or forward it to their finance team.",
+  },
+  {
+    q: "Can I keep my Stripe, PayPal or Square account?",
+    a: "Yes. Connect the account you already use and payments keep landing there, at your usual rates. Dodo handles the invoice, the client page and the reminders, and marks the invoice paid when the money arrives. Paid some other way, like Zelle or a check? Mark it paid in one tap. Paid invoices can also sync to Tyms, QuickBooks or Xero.",
+  },
+  {
+    q: "Does it help with taxes?",
+    a: "Yes. Every payment shows a suggested amount to set aside, you get a heads-up before quarterly estimated tax dates, and Dodo tells you in plain English whether your work needs sales tax. Year-end totals per client are ready for your accountant. It's there to help you plan, not to replace tax advice.",
   },
   {
     q: "What does it cost?",

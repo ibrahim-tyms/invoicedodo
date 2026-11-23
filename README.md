@@ -40,3 +40,20 @@ RESEND_SEGMENT_ID=...
 
 - Illustrative figures in the mockups (fee $9.12, tax set-aside $283, client names) are examples, not product promises.
 - No unverified statistics are published on the page (see `../research/us-pain-points.md`, "verify before publishing").
+
+## Blog (Prismic)
+
+Content lives in the `invoicedodo` Prismic repository. Models are in `customtypes/` and `slices/`; change them with `npx prismic` (never by editing the JSON), commit, then `npx prismic push`.
+
+- **Blog Post** (`/blog/:uid`): title, excerpt, cover, category, author, reviewer, dates, key takeaways, FAQs, references, related posts, and the article body built from slices (Rich Text, Callout, Figure, Data Table, Quote, Stats, Pros and Cons, Call to Action, Video). SEO tab: meta title, description, image, canonical URL, noindex.
+- **Author** (`/blog/author/:uid`) and **Blog Category** (`/blog/category/:uid`).
+- **Source**: one document per reference (title, publisher, URL, year, date checked). In any text, select the words a fact supports and link them to a Source document. The site shows a numbered footnote and builds the References list automatically. Stats can point to a Source too.
+
+Every post gets BlogPosting, BreadcrumbList and FAQPage structured data, a generated 1200×630 social image (a Meta Image in Prismic replaces it), and appears in `/sitemap.xml` and `/blog/rss.xml`.
+
+After deploying:
+```bash
+npx prismic webhook create https://invoicedodo.com/api/revalidate --trigger documentsPublished --trigger documentsUnpublished
+npx prismic preview add https://invoicedodo.com/api/preview --name Production
+npx prismic preview set-simulator https://invoicedodo.com
+```

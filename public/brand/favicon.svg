@@ -1,10 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <title>InvoiceDodo</title>
-  <!-- Same head-only dodo as the main mark, on a teal tile for small sizes. -->
-  <rect width="32" height="32" rx="8" fill="#174E48"/>
-  <g transform="translate(1.5 0.9) scale(0.42)">
-    <path d="M34 24 Q58.4 21.6 62 39.6 Q62.9 50.4 53.9 49.5 Q55.7 43.2 45.8 42.3 L34 44 Z" fill="#F4A261"/>
-    <circle cx="26" cy="36" r="20" fill="#FFF8EF"/>
-    <circle cx="31.6" cy="31" r="3.6" fill="#242A29"/>
+  <!-- The full-colour mark, no background tile. -->
+  <g transform="translate(16 17.5) scale(0.46) translate(-41 -44)">
+    <path d="M33 21 Q33.5 13 39 16 Q41 10 45.5 15 Q50 12 49.5 20" fill="none" stroke="#174E48" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="41" cy="44" r="25" fill="#174E48"/>
+    <circle cx="31.5" cy="39" r="6.4" fill="#FFF8EF"/>
+    <circle cx="50.5" cy="39" r="6.4" fill="#FFF8EF"/>
+    <circle cx="32.5" cy="39.8" r="3.1" fill="#242A29"/>
+    <circle cx="49.5" cy="39.8" r="3.1" fill="#242A29"/>
+    <path d="M32 47.5 Q41 42.5 50 47.5 Q51.2 55.5 44.6 61.4 Q41 64.6 38.2 61.6 Q41.6 59 39.8 56 Q33.4 53.6 32 47.5 Z" fill="#F4A261"/>
+    <circle cx="37.6" cy="49" r="1.1" fill="#C97A3A"/>
+    <circle cx="44.4" cy="49" r="1.1" fill="#C97A3A"/>
   </g>
 </svg>

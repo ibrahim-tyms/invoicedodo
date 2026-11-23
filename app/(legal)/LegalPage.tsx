@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Logo } from "../components/Brand";
 import { LEGAL } from "./config";
+import { SITE, WEBSITE_ID, absoluteUrl, breadcrumbLd, jsonLd } from "../lib/site";
 
 export type LegalSection = { id: string; title: string; body: ReactNode };
 
@@ -11,15 +12,39 @@ export function LegalPage({
   summary,
   sections,
   other,
+  path,
+  description,
 }: {
   title: string;
   intro: ReactNode;
   summary: ReactNode[];
   sections: LegalSection[];
   other: { href: string; label: string };
+  path: string;
+  description: string;
 }) {
+  const ld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${absoluteUrl(path)}#webpage`,
+        url: absoluteUrl(path),
+        name: `${title} | ${SITE.name}`,
+        description,
+        isPartOf: { "@id": WEBSITE_ID },
+        inLanguage: "en-US",
+        dateModified: new Date(LEGAL.lastUpdated).toISOString().slice(0, 10),
+      },
+      breadcrumbLd([
+        { name: "Home", path: "/" },
+        { name: title, path },
+      ]),
+    ],
+  };
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(ld)} />
       <a href="#legal-main" className="skip">
         Skip to content
       </a>
