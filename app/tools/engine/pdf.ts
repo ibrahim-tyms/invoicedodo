@@ -1,5 +1,6 @@
 import type { Doc } from "./model";
-import { MODES, money, prettyDate, termsLabel, totals } from "./model";
+import { MODES, discountLabel, pdfMoney, prettyDate, termsLabel, totals } from "./model";
+import { countryName } from "../../lib/locale-data";
 
 /** Builds a US Letter PDF with real (selectable) text. jsPDF is loaded only when someone downloads. */
 export async function buildPdf(doc: Doc) {
@@ -14,7 +15,7 @@ export async function buildPdf(doc: Doc) {
   const muted: [number, number, number] = [110, 116, 113];
   const line: [number, number, number] = [222, 227, 225];
   const accent = hexToRgb(doc.accent);
-  const fmt = (n: number) => money(n, doc.currency);
+  const fmt = (n: number) => pdfMoney(n, doc.currency);
 
   pdf.setProperties({ title: `${doc.title} ${doc.number}`.trim(), creator: "InvoiceDodo" });
 
@@ -67,7 +68,7 @@ export async function buildPdf(doc: Doc) {
       yy += 15;
     }
     pdf.setFont("helvetica", "normal").setFontSize(9.5).setTextColor(...ink);
-    for (const part of [p.address, p.email, p.phone].filter(Boolean)) {
+    for (const part of [p.address, countryName(p.country).replace(/[‘’]/g, "'"), p.email, p.phone].filter(Boolean)) {
       const lines = pdf.splitTextToSize(part, width) as string[];
       pdf.text(lines, x, yy);
       yy += lines.length * 12.5;
@@ -126,7 +127,7 @@ export async function buildPdf(doc: Doc) {
     y += bold ? 18 : 15;
   };
   row("Subtotal", fmt(t.subtotal));
-  if (t.discount) row("Discount", `-${fmt(t.discount)}`);
+  if (t.discount) row(discountLabel(doc), `-${fmt(t.discount)}`);
   if (doc.taxRate) row(`Tax (${doc.taxRate}%)`, fmt(t.tax));
   if (t.shipping) row("Shipping", fmt(t.shipping));
   if (cfg.showPaid && t.paid) {

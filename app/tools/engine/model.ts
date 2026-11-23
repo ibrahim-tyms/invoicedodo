@@ -4,7 +4,9 @@ export type DocMode = "invoice" | "receipt" | "estimate" | "proforma";
 
 export type LineItem = { id: string; description: string; qty: number; rate: number };
 
-export type Party = { name: string; email: string; phone: string; address: string };
+export type Party = { name: string; email: string; phone: string; address: string; country: string /* ISO 3166 alpha-2, "" = none */ };
+
+export const emptyParty = (): Party => ({ name: "", email: "", phone: "", address: "", country: "" });
 
 export type Doc = {
   mode: DocMode;
@@ -19,7 +21,8 @@ export type Doc = {
   to: Party;
   items: LineItem[];
   taxRate: number; // percent
-  discount: number; // flat amount
+  discount: number; // flat amount, or percent when discountType is "percent"
+  discountType: "flat" | "percent";
   shipping: number; // flat amount
   amountPaid: number; // invoice: payments received; receipt: ignored (paid in full)
   paymentMethod: string; // receipt
@@ -113,8 +116,6 @@ export const TERMS: { value: string; label: string; days: number | null }[] = [
   { value: "custom", label: "Custom date", days: null },
 ];
 
-export const CURRENCIES = ["USD", "CAD", "EUR", "GBP", "AUD"] as const;
-
 export const PAYMENT_METHODS = ["Card", "Cash", "Check", "ACH bank transfer", "Zelle", "Venmo", "PayPal", "Cash App", "Wire transfer", "Other"];
 
 export const ACCENTS = ["#174e48", "#242a29", "#3b6e96", "#7d5f0c", "#b23f33"];
@@ -154,11 +155,12 @@ export function newDoc(mode: DocMode, preset?: Preset, issue: string = todayISO(
     terms,
     dueDate: !issue || mode === "receipt" ? "" : addDays(issue, mode === "invoice" ? days : 30),
     currency: "USD",
-    from: { name: "", email: "", phone: "", address: "" },
-    to: { name: "", email: "", phone: "", address: "" },
+    from: emptyParty(),
+    to: emptyParty(),
     items: (preset?.items ?? [{ description: "", qty: 1, rate: 0 }]).map((it, i) => ({ ...it, id: `i${i}` })),
     taxRate: preset?.taxRate ?? 0,
     discount: 0,
+    discountType: "flat",
     shipping: 0,
     amountPaid: 0,
     paymentMethod: "Card",
@@ -173,7 +175,8 @@ const r2 = (n: number) => Math.round((Number.isFinite(n) ? n : 0) * 100) / 100;
 
 export function totals(doc: Doc) {
   const subtotal = r2(doc.items.reduce((s, it) => s + r2((it.qty || 0) * (it.rate || 0)), 0));
-  const discount = r2(Math.min(Math.max(doc.discount || 0, 0), subtotal));
+  const rawDiscount = doc.discountType === "percent" ? (subtotal * Math.min(Math.max(doc.discount || 0, 0), 100)) / 100 : doc.discount || 0;
+  const discount = r2(Math.min(Math.max(rawDiscount, 0), subtotal));
   const taxable = r2(subtotal - discount);
   const tax = r2((taxable * Math.max(doc.taxRate || 0, 0)) / 100);
   const shipping = r2(Math.max(doc.shipping || 0, 0));
@@ -185,10 +188,28 @@ export function totals(doc: Doc) {
 
 export function money(n: number, currency: string) {
   try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(n);
+    // "symbol" keeps US$/CA$/A$ distinct; where it falls back to the bare code (NGN, KES...) use the local sign (₦, KSh).
+    const s = new Intl.NumberFormat("en-US", { style: "currency", currency }).format(n);
+    if (!s.includes(currency)) return s;
+    return new Intl.NumberFormat("en-US", { style: "currency", currency, currencyDisplay: "narrowSymbol" }).format(n);
   } catch {
     return `${currency} ${n.toFixed(2)}`;
   }
+}
+
+/** For the PDF: its built-in fonts only cover Latin-1 (+ €), so symbols like ₦ ₹ ₩ fall back to the ISO code. */
+export function pdfMoney(n: number, currency: string) {
+  const s = money(n, currency);
+  if (!/[^\u0000-\u00ff\u20ac]/.test(s)) return s;
+  try {
+    return new Intl.NumberFormat("en-US", { style: "currency", currency, currencyDisplay: "code" }).format(n).replace(/\u00a0/g, " ");
+  } catch {
+    return `${currency} ${n.toFixed(2)}`;
+  }
+}
+
+export function discountLabel(doc: Doc) {
+  return doc.discountType === "percent" && doc.discount ? `Discount (${doc.discount}%)` : "Discount";
 }
 
 export function prettyDate(iso: string) {

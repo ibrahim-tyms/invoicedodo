@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { CountrySelect, CurrencySelect, Field, InlineToggle, MoneyInput, NumberInput, Select, TextArea, TextInput } from "../../components/fields";
+import { countryName, currencySymbol } from "../../lib/locale-data";
 import {
   ACCENTS,
-  CURRENCIES,
   MODES,
   PAYMENT_METHODS,
   TERMS,
   addDays,
+  discountLabel,
+  emptyParty,
   money,
   newDoc,
   nextNumber,
@@ -56,9 +59,13 @@ export function DocTool({ mode, preset, presetKey }: { mode: DocMode; preset?: P
     const profile = load<{ from: Party; logo: string | null; accent: string }>(PROFILE);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time restore from localStorage after hydration
     setDoc((d) => {
-      if (draft && draft.mode === mode) return { ...d, ...draft };
+      // Older drafts may miss newer fields (country, discountType): merge over fresh defaults.
+      if (draft && draft.mode === mode)
+        return { ...d, ...draft, from: { ...emptyParty(), ...draft.from }, to: { ...emptyParty(), ...draft.to }, discountType: draft.discountType ?? "flat" };
       const fresh = newDoc(mode, preset); // today's dates, set in the browser
-      return profile ? { ...fresh, from: profile.from, logo: profile.logo, accent: profile.accent ?? fresh.accent } : fresh;
+      return profile
+        ? { ...fresh, from: { ...emptyParty(), ...profile.from }, logo: profile.logo, accent: profile.accent ?? fresh.accent }
+        : fresh;
     });
     setReady(true);
   }, [mode, storeKey, preset]);
@@ -122,6 +129,7 @@ export function DocTool({ mode, preset, presetKey }: { mode: DocMode; preset?: P
       currency: d.currency,
       paymentInstructions: d.paymentInstructions,
       taxRate: d.taxRate,
+      discountType: d.discountType,
       number: nextNumber(d.number),
     }));
 
@@ -131,57 +139,49 @@ export function DocTool({ mode, preset, presetKey }: { mode: DocMode; preset?: P
 
   return (
     <div className="tool" data-mode={mode}>
-      <form className="tool-form" onSubmit={(e) => e.preventDefault()} aria-label={`${cfg.title} details`}>
+      <form className="tool-form" onSubmit={(e) => e.preventDefault()} aria-label={`${cfg.title} details`} noValidate>
         <fieldset className="tool-card">
           <legend>Document</legend>
           <div className="tool-grid">
             <Field label="Title">
-              <input value={doc.title} onChange={(e) => set("title", e.target.value)} />
+              <TextInput value={doc.title} onChange={(e) => set("title", e.target.value)} />
             </Field>
             <Field label="Number">
-              <input value={doc.number} onChange={(e) => set("number", e.target.value)} />
+              <TextInput value={doc.number} onChange={(e) => set("number", e.target.value)} spellCheck={false} />
             </Field>
             <Field label={cfg.issueLabel}>
-              <input type="date" value={doc.issueDate} onChange={(e) => setIssue(e.target.value)} />
+              <TextInput type="date" value={doc.issueDate} onChange={(e) => setIssue(e.target.value)} />
             </Field>
             {cfg.showTerms && (
               <Field label="Payment terms">
-                <select value={doc.terms} onChange={(e) => setTerms(e.target.value)}>
-                  {TERMS.map((o) => (
-                    <option key={o.value} value={o.value}>
-                      {o.label}
-                    </option>
-                  ))}
-                </select>
+                <Select value={doc.terms} onChange={setTerms} options={TERMS.map((o) => ({ value: o.value, label: o.label }))} />
               </Field>
             )}
             {cfg.dueLabel && (
               <Field label={cfg.dueLabel}>
-                <input
+                <TextInput
                   type="date"
                   value={doc.dueDate}
+                  min={doc.issueDate || undefined}
                   onChange={(e) => setDoc((d) => ({ ...d, dueDate: e.target.value, terms: d.mode === "invoice" ? "custom" : d.terms }))}
                 />
               </Field>
             )}
             {cfg.showPaymentMethod && (
               <Field label="Payment method">
-                <select value={doc.paymentMethod} onChange={(e) => set("paymentMethod", e.target.value)}>
-                  {PAYMENT_METHODS.map((m) => (
-                    <option key={m}>{m}</option>
-                  ))}
-                </select>
+                <Select
+                  value={doc.paymentMethod}
+                  onChange={(v) => set("paymentMethod", v)}
+                  options={PAYMENT_METHODS.map((m) => ({ value: m, label: m }))}
+                  searchable={false}
+                />
               </Field>
             )}
-            <Field label="PO number" hint="Optional. Many business clients won't pay without it.">
-              <input value={doc.po} onChange={(e) => set("po", e.target.value)} placeholder="e.g. PO-4821" />
-            </Field>
             <Field label="Currency">
-              <select value={doc.currency} onChange={(e) => set("currency", e.target.value)}>
-                {CURRENCIES.map((c) => (
-                  <option key={c}>{c}</option>
-                ))}
-              </select>
+              <CurrencySelect value={doc.currency} onChange={(v) => set("currency", v)} />
+            </Field>
+            <Field label="PO number" optional hint="Many business clients won't pay without it.">
+              <TextInput value={doc.po} onChange={(e) => set("po", e.target.value)} placeholder="e.g. PO-4821" spellCheck={false} />
             </Field>
           </div>
         </fieldset>
@@ -238,26 +238,45 @@ export function DocTool({ mode, preset, presetKey }: { mode: DocMode; preset?: P
             </div>
             {doc.items.map((it, i) => (
               <div className="tool-item" key={it.id}>
-                <textarea
-                  rows={1}
-                  aria-label={`Item ${i + 1} description`}
-                  value={it.description}
-                  placeholder="Service or product"
-                  onChange={(e) => setItem(it.id, { description: e.target.value })}
-                />
-                <NumInput
-                  aria-label={`Item ${i + 1} quantity`}
-                  value={it.qty}
-                  onValue={(n) => setItem(it.id, { qty: n })}
-                />
-                <NumInput
-                  aria-label={`Item ${i + 1} rate`}
-                  value={it.rate}
-                  onValue={(n) => setItem(it.id, { rate: n })}
-                />
-                <output>{fmt((it.qty || 0) * (it.rate || 0))}</output>
-                <button type="button" className="tool-x" aria-label={`Remove item ${i + 1}`} onClick={() => removeItem(it.id)}>
-                  ×
+                <div className="tool-cell tool-cell-desc">
+                  <TextArea
+                    minRows={1}
+                    aria-label={`Item ${i + 1} description`}
+                    value={it.description}
+                    placeholder="Service or product"
+                    onChange={(e) => setItem(it.id, { description: e.target.value })}
+                  />
+                </div>
+                <div className="tool-cell tool-cell-qty">
+                  <span className="tool-cell-label" aria-hidden="true">Qty</span>
+                  <NumberInput
+                    aria-label={`Item ${i + 1} quantity`}
+                    value={it.qty}
+                    onValue={(n) => setItem(it.id, { qty: n })}
+                    decimals={2}
+                    align="right"
+                    placeholder="0"
+                  />
+                </div>
+                <div className="tool-cell tool-cell-rate">
+                  <span className="tool-cell-label" aria-hidden="true">Rate</span>
+                  <MoneyInput aria-label={`Item ${i + 1} rate`} currency={doc.currency} value={it.rate} onValue={(n) => setItem(it.id, { rate: n })} />
+                </div>
+                <div className="tool-cell tool-cell-amt">
+                  <span className="tool-cell-label" aria-hidden="true">Amount</span>
+                  <output aria-label={`Item ${i + 1} amount`}>{fmt((it.qty || 0) * (it.rate || 0))}</output>
+                </div>
+                <button
+                  type="button"
+                  className="tool-x"
+                  aria-label={`Remove item ${i + 1}`}
+                  title="Remove item"
+                  disabled={doc.items.length < 2}
+                  onClick={() => removeItem(it.id)}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                  </svg>
                 </button>
               </div>
             ))}
@@ -265,19 +284,36 @@ export function DocTool({ mode, preset, presetKey }: { mode: DocMode; preset?: P
               + Add item
             </button>
           </div>
-          <div className="tool-grid tool-grid-4">
-            <Field label="Tax rate (%)" hint="Your state + local sales tax, if it applies.">
-              <NumInput value={doc.taxRate} onValue={(n) => set("taxRate", n)} />
+          <div className="tool-grid tool-adjust">
+            <Field label="Tax rate" hint="Your state + local sales tax, if it applies.">
+              <NumberInput value={doc.taxRate} onValue={(n) => set("taxRate", n)} decimals={3} max={100} step={0.25} suffix="%" align="right" placeholder="0" />
             </Field>
             <Field label="Discount">
-              <NumInput value={doc.discount} onValue={(n) => set("discount", n)} />
+              {doc.discountType === "percent" ? (
+                <NumberInput
+                  value={doc.discount}
+                  onValue={(n) => set("discount", n)}
+                  decimals={2}
+                  max={100}
+                  align="right"
+                  placeholder="0"
+                  suffix={<DiscountToggle doc={doc} onChange={(v) => setDoc((d) => ({ ...d, discountType: v, discount: 0 }))} />}
+                />
+              ) : (
+                <MoneyInput
+                  currency={doc.currency}
+                  value={doc.discount}
+                  onValue={(n) => set("discount", n)}
+                  suffix={<DiscountToggle doc={doc} onChange={(v) => setDoc((d) => ({ ...d, discountType: v, discount: 0 }))} />}
+                />
+              )}
             </Field>
             <Field label="Shipping">
-              <NumInput value={doc.shipping} onValue={(n) => set("shipping", n)} />
+              <MoneyInput currency={doc.currency} value={doc.shipping} onValue={(n) => set("shipping", n)} />
             </Field>
             {cfg.showPaid && (
               <Field label="Already paid">
-                <NumInput value={doc.amountPaid} onValue={(n) => set("amountPaid", n)} />
+                <MoneyInput currency={doc.currency} value={doc.amountPaid} onValue={(n) => set("amountPaid", n)} />
               </Field>
             )}
           </div>
@@ -285,19 +321,21 @@ export function DocTool({ mode, preset, presetKey }: { mode: DocMode; preset?: P
 
         <fieldset className="tool-card">
           <legend>Notes</legend>
-          {cfg.showInstructions && (
-            <Field label="How to pay" hint="ACH details, Zelle email, Venmo handle, or a card payment link.">
-              <textarea
-                rows={3}
-                value={doc.paymentInstructions}
-                placeholder={"Zelle: billing@yourbusiness.com\nACH: Bank name, routing and account number"}
-                onChange={(e) => set("paymentInstructions", e.target.value)}
-              />
+          <div className="tool-stack">
+            {cfg.showInstructions && (
+              <Field label="How to pay" hint="ACH details, Zelle email, Venmo handle, or a card payment link.">
+                <TextArea
+                  minRows={3}
+                  value={doc.paymentInstructions}
+                  placeholder={"Zelle: billing@yourbusiness.com\nACH: Bank name, routing and account number"}
+                  onChange={(e) => set("paymentInstructions", e.target.value)}
+                />
+              </Field>
+            )}
+            <Field label="Notes">
+              <TextArea minRows={3} value={doc.notes} placeholder={cfg.notesPlaceholder} onChange={(e) => set("notes", e.target.value)} />
             </Field>
-          )}
-          <Field label="Notes">
-            <textarea rows={3} value={doc.notes} placeholder={cfg.notesPlaceholder} onChange={(e) => set("notes", e.target.value)} />
-          </Field>
+          </div>
         </fieldset>
       </form>
 
@@ -396,7 +434,7 @@ export function DocTool({ mode, preset, presetKey }: { mode: DocMode; preset?: P
             <dd>{fmt(t.subtotal)}</dd>
             {t.discount > 0 && (
               <>
-                <dt>Discount</dt>
+                <dt>{discountLabel(doc)}</dt>
                 <dd>-{fmt(t.discount)}</dd>
               </>
             )}
@@ -449,32 +487,56 @@ export function DocTool({ mode, preset, presetKey }: { mode: DocMode; preset?: P
   );
 }
 
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+function PartyFields({ p, onChange, namePh }: { p: Party; onChange: (k: keyof Party, v: string) => void; namePh: string }) {
+  const [emailTouched, setEmailTouched] = useState(false);
+  const emailError = emailTouched && p.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(p.email.trim()) ? "Enter a valid email, like name@company.com" : null;
   return (
-    <label className="tool-field">
-      <span className="tool-label">{label}</span>
-      {children}
-      {hint && <span className="tool-hint">{hint}</span>}
-    </label>
+    <div className="tool-grid">
+      <Field label="Name" className="span-2">
+        <TextInput value={p.name} placeholder={namePh} autoComplete="organization" onChange={(e) => onChange("name", e.target.value)} />
+      </Field>
+      <Field label="Email" optional error={emailError}>
+        <TextInput
+          type="email"
+          inputMode="email"
+          value={p.email}
+          placeholder="name@company.com"
+          autoComplete="email"
+          spellCheck={false}
+          onChange={(e) => onChange("email", e.target.value)}
+          onBlur={() => setEmailTouched(true)}
+        />
+      </Field>
+      <Field label="Phone" optional>
+        <TextInput type="tel" inputMode="tel" value={p.phone} placeholder="(555) 123-4567" autoComplete="tel" onChange={(e) => onChange("phone", e.target.value)} />
+      </Field>
+      <Field label="Address" optional className="span-2">
+        <TextArea
+          minRows={2}
+          value={p.address}
+          placeholder={"Street address\nCity, State ZIP"}
+          autoComplete="street-address"
+          onChange={(e) => onChange("address", e.target.value)}
+        />
+      </Field>
+      <Field label="Country" optional className="span-2">
+        <CountrySelect value={p.country} onChange={(v) => onChange("country", v)} />
+      </Field>
+    </div>
   );
 }
 
-function PartyFields({ p, onChange, namePh }: { p: Party; onChange: (k: keyof Party, v: string) => void; namePh: string }) {
+function DiscountToggle({ doc, onChange }: { doc: Doc; onChange: (v: Doc["discountType"]) => void }) {
   return (
-    <div className="tool-grid">
-      <Field label="Name">
-        <input value={p.name} placeholder={namePh} autoComplete="organization" onChange={(e) => onChange("name", e.target.value)} />
-      </Field>
-      <Field label="Email">
-        <input type="email" value={p.email} autoComplete="email" onChange={(e) => onChange("email", e.target.value)} />
-      </Field>
-      <Field label="Phone">
-        <input type="tel" value={p.phone} autoComplete="tel" onChange={(e) => onChange("phone", e.target.value)} />
-      </Field>
-      <Field label="Address">
-        <textarea rows={2} value={p.address} autoComplete="street-address" onChange={(e) => onChange("address", e.target.value)} />
-      </Field>
-    </div>
+    <InlineToggle
+      label="Discount type"
+      value={doc.discountType}
+      onChange={onChange}
+      options={[
+        { value: "percent", label: "%", title: "Percentage of subtotal" },
+        { value: "flat", label: currencySymbol(doc.currency), title: "Fixed amount" },
+      ]}
+    />
   );
 }
 
@@ -483,35 +545,9 @@ function PartyView({ label, p, empty }: { label: string; p: Party; empty: string
     <div>
       <h3>{label}</h3>
       {p.name ? <p className="sheet-name">{p.name}</p> : <p className="sheet-ph">{empty}</p>}
-      {[p.address, p.email, p.phone].filter(Boolean).map((v, i) => (
+      {[p.address, countryName(p.country), p.email, p.phone].filter(Boolean).map((v, i) => (
         <p key={i}>{v}</p>
       ))}
     </div>
-  );
-}
-
-const num = (v: string) => {
-  const n = parseFloat(v.replace(/[^0-9.\-]/g, ""));
-  return Number.isFinite(n) ? n : 0;
-};
-
-/** Number field that keeps what you type ("12.", "") while reporting a clean number. */
-function NumInput({ value, onValue, ...rest }: { value: number; onValue: (n: number) => void; "aria-label"?: string }) {
-  const [text, setText] = useState(value ? String(value) : "");
-  useEffect(() => {
-    // Sync when the value changes from outside (e.g. "New invoice"), not while typing.
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- mirror external resets into the text box
-    setText((cur) => (num(cur) === value ? cur : value ? String(value) : ""));
-  }, [value]);
-  return (
-    <input
-      {...rest}
-      inputMode="decimal"
-      value={text}
-      onChange={(e) => {
-        setText(e.target.value);
-        onValue(num(e.target.value));
-      }}
-    />
   );
 }
